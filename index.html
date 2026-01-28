@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Safal Library - Manager</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 10px; }
+        .hidden { display: none; }
+        .loader { border: 3px solid #f3f3f3; border-top: 3px solid #3b82f6; border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; display: inline-block; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        /* Modal for WhatsApp Options */
+        .wa-modal { animation: popIn 0.2s ease-out; }
+        @keyframes popIn { 0% { transform: scale(0.9); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans pb-20">
+
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-md mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="bg-blue-600 text-white w-10 h-10 flex items-center justify-center rounded-xl shadow-blue-200 shadow-lg">
+                    <i class="fa-solid fa-book-open"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold text-slate-800 leading-tight">Safal Library</h1>
+                    <p class="text-[10px] text-green-600 font-bold uppercase tracking-wide"><i class="fa-solid fa-circle text-[6px] mr-1"></i> Online Mode</p>
+                </div>
+            </div>
+            <button onclick="toggleView('list')" class="relative p-2 text-slate-400 hover:text-blue-600 transition">
+                <i class="fa-solid fa-users-gear text-xl"></i>
+            </button>
+        </div>
+    </header>
+
+    <main id="registrationView" class="max-w-md mx-auto px-4 py-6">
+        <div class="flex justify-between items-end mb-4">
+            <h2 class="text-xl font-bold text-slate-700">New Enrollment</h2>
+            <button type="button" onclick="clearForm()" class="text-xs text-blue-600 font-medium">Reset Form</button>
+        </div>
+
+        <form id="enrollmentForm" class="space-y-4">
+            <input type="hidden" id="editDocId" value=""> 
+
+            <div class="bg-blue-50 p-5 rounded-2xl border border-blue-100">
+                <h3 class="text-xs font-bold text-blue-600 uppercase mb-3"><i class="fa-solid fa-id-card mr-1"></i> Library Account</h3>
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label class="text-xs font-bold text-slate-500">Reg No.</label>
+                        <input type="text" id="regNo" placeholder="e.g. SL-101" class="w-full p-3 rounded-lg border border-blue-200 text-blue-700 font-bold" required>
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-slate-500">Date of Reg.</label>
+                        <input type="date" id="regDate" class="w-full p-3 rounded-lg border bg-white" required>
+                    </div>
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-slate-500">Set Password</label>
+                    <input type="text" id="password" placeholder="Create login password" class="w-full p-3 rounded-lg border bg-white">
+                </div>
+            </div>
+
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200/60 space-y-4">
+                <div>
+                    <label class="text-xs font-bold text-slate-500">Student Name</label>
+                    <input type="text" id="studentName" placeholder="Full Name" class="w-full p-3 rounded-lg border bg-slate-50" required>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-xs font-bold text-slate-500">Father's Name</label>
+                        <input type="text" id="fatherName" placeholder="Mr. Name" class="w-full p-3 rounded-lg border bg-slate-50">
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-slate-500">Mother's Name</label>
+                        <input type="text" id="motherName" placeholder="Mrs. Name" class="w-full p-3 rounded-lg border bg-slate-50">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-xs font-bold text-slate-500">Aadhar No.</label>
+                        <input type="number" id="aadharNo" placeholder="1234 5678..." class="w-full p-3 rounded-lg border bg-slate-50">
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-slate-500">Gender</label>
+                        <select id="gender" class="w-full p-3 rounded-lg border bg-slate-50">
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200/60 space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-xs font-bold text-slate-500">Mobile No.</label>
+                        <input type="tel" id="mobileNo" placeholder="Student No." class="w-full p-3 rounded-lg border bg-slate-50" required>
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-slate-500">Guardian No.</label>
+                        <input type="tel" id="guardianNo" placeholder="(Optional)" class="w-full p-3 rounded-lg border bg-slate-50">
+                    </div>
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-slate-500">Address</label>
+                    <textarea id="address" rows="2" placeholder="Full Address" class="w-full p-3 rounded-lg border bg-slate-50"></textarea>
+                </div>
+            </div>
+
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200/60">
+                <h3 class="text-xs font-bold text-slate-500 uppercase mb-3">Shift & Fees</h3>
+                <div class="flex items-center gap-2 mb-4">
+                    <div class="flex-1">
+                        <label class="text-xs font-bold text-slate-500">Start Time</label>
+                        <input type="time" id="startTime" class="w-full p-3 rounded-lg border bg-slate-50">
+                    </div>
+                    <span class="text-slate-400 mt-6">-</span>
+                    <div class="flex-1">
+                        <label class="text-xs font-bold text-slate-500">End Time</label>
+                        <input type="time" id="endTime" class="w-full p-3 rounded-lg border bg-slate-50">
+                    </div>
+                </div>
+                <div class="bg-red-50 p-3 rounded-xl border border-red-100">
+                    <label class="text-xs font-bold text-red-600 block mb-1">Next Fee Due Date</label>
+                    <input type="date" id="feeDueDate" class="w-full p-2 rounded border border-red-200 text-red-600 font-bold bg-white">
+                </div>
+            </div>
+
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200/60">
+                <h3 class="text-xs font-bold text-orange-500 uppercase mb-3">Form Photo</h3>
+                <input type="file" id="cameraInput" accept="image/*" class="hidden" onchange="handleImageUpload(event)">
+                <label for="cameraInput" id="uploadLabel" class="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50 transition">
+                    <i class="fa-solid fa-camera text-slate-300 text-2xl mb-2"></i>
+                    <p class="text-xs text-slate-500">Tap to Capture</p>
+                </label>
+                <div id="previewArea" class="hidden relative mt-2 rounded-xl overflow-hidden border border-slate-200 bg-black">
+                    <img id="imagePreview" class="w-full h-48 object-contain" src="">
+                    <div class="absolute top-2 right-2 bg-black/50 text-white text-[10px] px-2 py-1 rounded-full backdrop-blur-md" id="fileSize">0 MB</div>
+                    <button type="button" onclick="resetImage()" class="absolute top-2 left-2 bg-red-500 text-white w-6 h-6 rounded-full text-xs flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <input type="hidden" id="compressedImageData">
+            </div>
+
+            <button type="submit" id="submitBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-blue-200 active:scale-95 transition flex items-center justify-center gap-2">
+                <i class="fa-solid fa-check-circle"></i>
+                <span id="submitBtnText">Submit Registration</span>
+            </button>
+        </form>
+    </main>
+
+    <main id="adminView" class="hidden max-w-md mx-auto px-4 py-6">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-xl font-bold text-slate-700">Student List</h2>
+            <button onclick="toggleView('form')" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-bold shadow-lg shadow-blue-200">
+                <i class="fa-solid fa-plus mr-1"></i> Add New
+            </button>
+        </div>
+
+        <div class="relative mb-4">
+            <i class="fa-solid fa-search absolute left-3 top-3.5 text-slate-400 text-sm"></i>
+            <input type="text" id="searchInput" onkeyup="filterStudents()" placeholder="Search Name, Reg No, or Mobile..." class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 bg-white text-sm focus:outline-none focus:border-blue-500">
+        </div>
+
+        <div id="studentListContainer" class="space-y-4 pb-24">
+            <div class="text-center py-10"><div class="loader"></div><p class="text-xs text-slate-400 mt-2">Loading Database...</p></div>
+        </div>
+    </main>
+
+    <canvas id="idCardCanvas" width="1000" height="600" class="hidden"></canvas>
+
+    <div id="waModal" class="fixed inset-0 bg-black/50 hidden z-[60] flex items-end sm:items-center justify-center p-4 backdrop-blur-sm" onclick="closeWaModal(event)">
+        <div class="bg-white w-full max-w-sm rounded-2xl p-5 wa-modal shadow-2xl" onclick="event.stopPropagation()">
+            <div class="text-center mb-4">
+                <div class="w-12 h-12 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-2 text-2xl">
+                    <i class="fa-brands fa-whatsapp"></i>
+                </div>
+                <h3 class="font-bold text-lg">Send Message</h3>
+                <p class="text-xs text-slate-500" id="waStudentName">To Student</p>
+            </div>
+            
+            <div class="space-y-3">
+                <button onclick="sendWa('welcome')" class="w-full bg-green-600 text-white py-3 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-green-700">
+                    <i class="fa-solid fa-hand-sparkles"></i> 1. Welcome & Login Details
+                </button>
+                <button onclick="sendWa('due')" class="w-full bg-orange-500 text-white py-3 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-orange-600">
+                    <i class="fa-solid fa-bell"></i> 2. Fee Due Reminder
+                </button>
+            </div>
+            <button onclick="closeWaModal(true)" class="w-full mt-4 py-2 text-slate-400 text-sm font-bold">Cancel</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+
+        // YOUR API CONFIG
+        const firebaseConfig = {
+            apiKey: "AIzaSyAEU3K8FzwfZOsdTHSOTBzPoQ7wWc1jIhk",
+            authDomain: "safallibrary02-4e47b.firebaseapp.com",
+            projectId: "safallibrary02-4e47b",
+            storageBucket: "safallibrary02-4e47b.firebasestorage.app",
+            messagingSenderId: "718136047267",
+            appId: "1:718136047267:web:1ff63497bcb84d05323116"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        let allStudents = [];
+        let currentWaStudent = null; // Stores student data for the open modal
+
+        // --- DEFAULTS ---
+        document.getElementById('regDate').valueAsDate = new Date();
+        const nextMonth = new Date(); nextMonth.setDate(nextMonth.getDate() + 30);
+        document.getElementById('feeDueDate').value = nextMonth.toISOString().split('T')[0];
+
+        // --- VIEW HANDLING ---
+        window.toggleView = function(view) {
+            if(view === 'list') {
+                document.getElementById('registrationView').classList.add('hidden');
+                document.getElementById('adminView').classList.remove('hidden');
+                loadStudents();
+            } else {
+                document.getElementById('adminView').classList.add('hidden');
+                document.getElementById('registrationView').classList.remove('hidden');
+            }
+        }
+
+        // --- IMAGE HANDLING ---
+        window.handleImageUpload = function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    let width = img.width, height = img.height;
+                    const maxDim = 800; 
+                    if (width > height) { if (width > maxDim) { height *= maxDim / width; width = maxDim; } } 
+                    else { if (height > maxDim) { width *= maxDim / height; height = maxDim; } }
+                    canvas.width = width; canvas.height = height;
+                    ctx.drawImage(img, 0, 0, width, height);
+                    const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
+                    document.getElementById('imagePreview').src = dataUrl;
+                    document.getElementById('previewArea').classList.remove('hidden');
+                    document.getElementById('uploadLabel').classList.add('hidden');
+                    document.getElementById('compressedImageData').value = dataUrl;
+                    document.getElementById('fileSize').innerText = (dataUrl.length * 3 / 4 / (1024*1024)).toFixed(2) + " MB";
+                }
+                img.src = e.target.result;
+            }
+            reader.readAsDataURL(file);
+        }
+
+        window.resetImage = function() {
+            document.getElementById('previewArea').classList.add('hidden');
+            document.getElementById('uploadLabel').classList.remove('hidden');
+            document.getElementById('compressedImageData').value = "";
+            document.getElementById('cameraInput').value = "";
+        }
+
+        // --- SAVE DATA ---
+        document.getElementById('enrollmentForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            const originalText = document.getElementById('submitBtnText').innerText;
+            document.getElementById('submitBtnText').innerText = "Saving to Cloud...";
+            btn.disabled = true;
+
+            try {
+                const studentData = {
+                    regNo: document.getElementById('regNo').value.toUpperCase(),
+                    password: document.getElementById('password').value,
+                    regDate: document.getElementById('regDate').value,
+                    name: document.getElementById('studentName').value,
+                    father: document.getElementById('fatherName').value,
+                    mother: document.getElementById('motherName').value,
+                    aadhar: document.getElementById('aadharNo').value,
+                    gender: document.getElementById('gender').value,
+                    mobile: document.getElementById('mobileNo').value,
+                    guardianMobile: document.getElementById('guardianNo').value,
+                    address: document.getElementById('address').value,
+                    shiftStart: document.getElementById('startTime').value,
+                    shiftEnd: document.getElementById('endTime').value,
+                    feeDueDate: document.getElementById('feeDueDate').value,
+                    image: document.getElementById('compressedImageData').value,
+                    timestamp: new Date()
+                };
+
+                const editDocId = document.getElementById('editDocId').value;
+                if (editDocId) {
+                    await updateDoc(doc(db, "students", editDocId), studentData);
+                    alert('Updated Successfully!');
+                } else {
+                    await addDoc(collection(db, "students"), studentData);
+                    alert('Registered Successfully!');
+                }
+                clearForm();
+                toggleView('list');
+            } catch (error) {
+                alert("Error: " + error.message);
+            } finally {
+                document.getElementById('submitBtnText').innerText = originalText;
+                btn.disabled = false;
+            }
+        });
+
+        // --- LOAD LIST ---
+        async function loadStudents() {
+            const container = document.getElementById('studentListContainer');
+            container.innerHTML = `<div class="text-center py-10"><div class="loader"></div></div>`;
+            try {
+                const querySnapshot = await getDocs(collection(db, "students"));
+                allStudents = [];
+                querySnapshot.forEach((doc) => allStudents.push({ id: doc.id, ...doc.data() }));
+                renderList(allStudents);
+            } catch (error) {
+                container.innerHTML = `<p class="text-red-500 text-center">Error loading data.</p>`;
+            }
+        }
+
+        function renderList(list) {
+            const container = document.getElementById('studentListContainer');
+            container.innerHTML = '';
+            if (list.length === 0) {
+                container.innerHTML = `<div class="text-center text-slate-400 py-10">No students.</div>`;
+                return;
+            }
+            const sorted = list.sort((a, b) => b.timestamp - a.timestamp);
+
+            sorted.forEach((s) => {
+                const feeDate = new Date(s.feeDueDate);
+                const isOverdue = feeDate < new Date();
+                const feeClass = isOverdue ? 'text-red-500 font-bold' : 'text-green-600';
+                const avatar = s.image ? `<img src="${s.image}" class="w-16 h-16 rounded-lg object-cover bg-slate-100 border">` : `<div class="w-16 h-16 rounded-lg bg-blue-50 flex items-center justify-center text-blue-500 font-bold text-xl">${s.name.charAt(0)}</div>`;
+
+                const card = document.createElement('div');
+                card.className = 'bg-white p-4 rounded-xl border border-slate-100 shadow-sm relative';
+                card.innerHTML = `
+                    <div class="flex gap-3 mb-3">
+                        ${avatar}
+                        <div class="flex-1 min-w-0">
+                            <div class="flex justify-between items-start">
+                                <h3 class="font-bold text-slate-800 text-sm truncate">${s.name}</h3>
+                                <span class="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded font-bold">#${s.regNo || '---'}</span>
+                            </div>
+                            <p class="text-xs text-slate-500 mt-1"><i class="fa-solid fa-phone text-[10px] mr-1"></i> ${s.mobile}</p>
+                            <div class="flex items-center gap-3 mt-2 text-[10px] text-slate-500 border-t border-slate-50 pt-2">
+                                <span><i class="fa-solid fa-clock mr-1"></i>${formatTime(s.shiftStart)}-${formatTime(s.shiftEnd)}</span>
+                                <span class="${feeClass}">Due: ${s.feeDueDate || 'N/A'}</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-4 gap-2 pt-2 border-t border-slate-100">
+                        <button onclick="editStudent('${s.id}')" class="flex flex-col items-center justify-center py-1 rounded hover:bg-slate-50 text-slate-500 hover:text-blue-600 text-[10px] font-bold">
+                            <i class="fa-solid fa-pen mb-1 text-sm"></i> Edit
+                        </button>
+                        <button onclick="deleteStudent('${s.id}')" class="flex flex-col items-center justify-center py-1 rounded hover:bg-slate-50 text-slate-500 hover:text-red-500 text-[10px] font-bold">
+                            <i class="fa-solid fa-trash mb-1 text-sm"></i> Del
+                        </button>
+                        <button onclick="generateID('${s.id}')" class="flex flex-col items-center justify-center py-1 rounded bg-purple-50 text-purple-600 hover:bg-purple-100 text-[10px] font-bold">
+                            <i class="fa-solid fa-id-card mb-1 text-sm"></i> ID Card
+                        </button>
+                        <button onclick="openWaModal('${s.id}')" class="flex flex-col items-center justify-center py-1 rounded bg-green-50 text-green-600 hover:bg-green-100 text-[10px] font-bold">
+                            <i class="fa-brands fa-whatsapp mb-1 text-sm"></i> Chat
+                        </button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // --- EDIT & DELETE ---
+        window.editStudent = function(docId) {
+            const s = allStudents.find(student => student.id === docId);
+            if(!s) return;
+            document.getElementById('editDocId').value = docId;
+            document.getElementById('regNo').value = s.regNo || '';
+            document.getElementById('password').value = s.password || '';
+            document.getElementById('regDate').value = s.regDate;
+            document.getElementById('studentName').value = s.name;
+            document.getElementById('fatherName').value = s.father;
+            document.getElementById('motherName').value = s.mother;
+            document.getElementById('aadharNo').value = s.aadhar;
+            document.getElementById('gender').value = s.gender;
+            document.getElementById('mobileNo').value = s.mobile;
+            document.getElementById('guardianNo').value = s.guardianMobile;
+            document.getElementById('address').value = s.address;
+            document.getElementById('startTime').value = s.shiftStart;
+            document.getElementById('endTime').value = s.shiftEnd;
+            document.getElementById('feeDueDate').value = s.feeDueDate;
+            if(s.image) {
+                document.getElementById('imagePreview').src = s.image;
+                document.getElementById('previewArea').classList.remove('hidden');
+                document.getElementById('uploadLabel').classList.add('hidden');
+                document.getElementById('compressedImageData').value = s.image;
+            } else { resetImage(); }
+            document.getElementById('submitBtnText').innerText = "Update Student";
+            toggleView('form');
+        }
+
+        window.deleteStudent = async function(docId) {
+            if(confirm('Delete this student permanently?')) {
+                await deleteDoc(doc(db, "students", docId));
+                loadStudents();
+            }
+        }
+
+        // --- ID CARD GENERATOR (CANVAS) ---
+        window.generateID = function(docId) {
+            const s = allStudents.find(student => student.id === docId);
+            if(!s) return;
+
+            const canvas = document.getElementById('idCardCanvas');
+            const ctx = canvas.getContext('2d');
+
+            // 1. Background
+            ctx.fillStyle = "#ffffff";
+            ctx.fillRect(0, 0, 1000, 600);
+            
+            // Header
+            ctx.fillStyle = "#2563eb"; // Blue
+            ctx.fillRect(0, 0, 1000, 120);
+            ctx.fillStyle = "#ffffff";
+            ctx.font = "bold 50px Arial";
+            ctx.textAlign = "center";
+            ctx.fillText("SAFAL LIBRARY", 500, 80);
+
+            // Photo Border
+            ctx.lineWidth = 5;
+            ctx.strokeStyle = "#2563eb";
+            ctx.strokeRect(50, 150, 250, 300);
+
+            // Text Styles
+            ctx.fillStyle = "#1e293b"; // Slate 800
+            ctx.textAlign = "left";
+            ctx.font = "bold 35px Arial";
+            ctx.fillText(s.name.toUpperCase(), 350, 190);
+
+            ctx.font = "28px Arial";
+            ctx.fillStyle = "#64748b"; // Slate 500
+            
+            const startY = 250;
+            const gap = 50;
+            
+            ctx.fillText(`Reg No: ${s.regNo}`, 350, startY);
+            ctx.fillText(`Mobile: ${s.mobile}`, 350, startY + gap);
+            ctx.fillText(`Address: ${s.address.substring(0, 30)}...`, 350, startY + gap*2);
+            ctx.fillText(`Valid Thru: ${s.feeDueDate}`, 350, startY + gap*3);
+
+            // Footer
+            ctx.fillStyle = "#f1f5f9";
+            ctx.fillRect(0, 520, 1000, 80);
+            ctx.fillStyle = "#2563eb";
+            ctx.font = "bold 25px Arial";
+            ctx.textAlign = "center";
+            ctx.fillText("Always Carry This Card", 500, 570);
+
+            // Draw Image (Async) & Download
+            const img = new Image();
+            img.crossOrigin = "anonymous";
+            img.src = s.image || "https://via.placeholder.com/250x300";
+            
+            img.onload = function() {
+                // Crop/Fit image into 250x300 box at x=50, y=150
+                ctx.drawImage(img, 50, 150, 250, 300);
+                
+                // Download
+                const link = document.createElement('a');
+                link.download = `ID_${s.regNo}.png`;
+                link.href = canvas.toDataURL();
+                link.click();
+            }
+        }
+
+        // --- WHATSAPP LOGIC ---
+        window.openWaModal = function(docId) {
+            const s = allStudents.find(student => student.id === docId);
+            if(!s) return;
+            currentWaStudent = s;
+            document.getElementById('waStudentName').innerText = `To: ${s.name}`;
+            document.getElementById('waModal').classList.remove('hidden');
+        }
+
+        window.closeWaModal = function(isBtn) {
+            if(isBtn || event.target.id === 'waModal') {
+                document.getElementById('waModal').classList.add('hidden');
+            }
+        }
+
+        window.sendWa = function(type) {
+            if(!currentWaStudent) return;
+            const s = currentWaStudent;
+            const link = "https://safallibrary01.github.io/safallibrary/";
+            let msg = "";
+
+            if(type === 'welcome') {
+                msg = `*Welcome to Safal Library!* 📚%0A%0AHello ${s.name},%0AThank you for registering.%0A%0A*Your Login Details:*%0A👤 Reg No: ${s.regNo}%0A🔑 Password: ${s.password}%0A%0A🔗 *Login Here:* ${link}`;
+            } else {
+                msg = `*Fee Reminder - Safal Library* 🔔%0A%0AHello ${s.name},%0AThis is a reminder that your library fee is due on *${s.feeDueDate}*.%0A%0APlease pay to continue your sessions.%0A%0A*Your Login:*%0A👤 Reg No: ${s.regNo}%0A🔑 Pass: ${s.password}%0A🔗 ${link}`;
+            }
+
+            window.open(`https://wa.me/91${s.mobile}?text=${msg}`, '_blank');
+            closeWaModal(true);
+        }
+
+        // Utils
+        window.clearForm = function() {
+            document.getElementById('enrollmentForm').reset();
+            document.getElementById('editDocId').value = "";
+            document.getElementById('submitBtnText').innerText = "Submit Registration";
+            resetImage();
+        }
+        window.filterStudents = function() {
+            const term = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = allStudents.filter(s => s.name.toLowerCase().includes(term) || (s.regNo && s.regNo.toLowerCase().includes(term)));
+            renderList(filtered);
+        }
+        function formatTime(t) { if(!t)return"--";const[h,m]=t.split(':');return`${h%12||12}:${m}${h>=12?'PM':'AM'}`; }
+    </script>
+</body>
+</html>
